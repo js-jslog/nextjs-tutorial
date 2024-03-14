@@ -8,7 +8,7 @@ For more information, see the [course curriculum](https://nextjs.org/learn) on t
 
 ```bash
 docker build -t nextjs-dashboard-image .
-docker run -p 3000:3000 --name nextjs-dashboard-container -v nextjs-dashboard-volume:/app nextjs-dashboard-image - e POSTGRES_URL="postgres://default:<password>@ep-bold-credit-a4s6qon8-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require"
+docker run -e POSTGRES_URL="postgres://default:<password>@ep-bold-credit-a4s6qon8-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require" -p 3000:3000 --name nextjs-dashboard-container -v nextjs-dashboard-volume:/app nextjs-dashboard-image
 ```
 
 > Substitute `<password>` with the password for the database.
