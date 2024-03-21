@@ -1,0 +1,55 @@
+{
+    "name": "Nextjs tutorial",
+    "dockerFile": "../Dockerfile",
+    "settings": {
+        "build": {
+            "args": {
+                "TARGET_STAGE": "development"
+            }
+        },
+    },
+    "appPort": [3000, 8122],
+    "forwardPorts": [8121],
+    "overrideCommand": false,
+    /* The `mount` property allows for a more readable syntax (using object notation),
+    however, you then end up with a workspace mount being created in addition. This
+    pair of properties ensures that the "workspace" is set to the /app directory as
+    we would want, and that it is a volume, rather than a mount */
+    "workspaceMount": "source=nextjs-dashboard-volume,target=/app,type=volume",
+    "workspaceFolder": "/app",
+    "postCreateCommand": "git config --global user.name ${GIT_USER_NAME} && git config --global user.email ${GIT_USER_EMAIL} && git config --global merge.tool \"nvimdiff\"",
+/////////////////////////////////////////////////////////////////////////////
+//UNCOMMENT THIS SECTION IF YOU WANT TO USE THE EMBEDDED NEOVIM IDE
+/////////////////////////////////////////////////////////////////////////////
+    "containerEnv": {
+        "CLIPBOARDPATH": "/dev/clipboard",
+        /*- https://github.com/js-jslog/neovim-config/blob/3eeaf20/lua/jslog/options.lua#L38
+          - https://github.com/js-jslog/development-env/blob/81e72ab573/devcon-resources/inbound-clip-handler.sh#L15
+          - https://github.com/js-jslog/development-env/blob/81e72ab573/devcon-resources/outbound-clip-emitter.sh#L12
+        ------------------------------------------------*/
+        "CLIPRESOURCEDIR": "/usr/local/bin/socat-clip-resources",
+        /*- ./install-socat.sh
+        ------------------------------------------------*/
+        "CLIPEMITTERPATH": "/usr/local/bin/socat-clip-resources/outbound-clip-emitter.sh",
+        /*- https://github.com/js-jslog/neovim-config/blob/3eeaf20/lua/jslog/options.lua#L39
+          - ./install-socat.sh
+        ------------------------------------------------*/
+        "CLIPHANDLERPATH": "/usr/local/bin/socat-clip-resources/inbound-clip-handler.sh",
+        /*- ./install-socat.sh
+        ------------------------------------------------*/
+        "HOST_CLIPLISTENPORT": "8121",
+        /*- https://github.com/js-jslog/development-env/blob/81e72ab573/devcon-resources/outbound-clip-emitter.sh#L12
+        ------------------------------------------------*/
+        "DEVCON_CLIPLISTENPORT": "8122",
+        /*- ./install-socat.sh
+        ------------------------------------------------*/
+        "ISDEVCONTAINER": true
+        /*- https://github.com/js-jslog/neovim-config/blob/3eeaf20/lua/jslog/options.lua#L27
+        ------------------------------------------------*/
+    },
+    "onCreateCommand": [
+        "/bin/bash",
+        "-c",
+        ".devcontainer/install-neovim.sh && .devcontainer/install-socat.sh"
+    ]
+}
